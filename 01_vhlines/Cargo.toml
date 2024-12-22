@@ -9,6 +9,7 @@ edition = "2021"
 bevy = "0.15"
 gilrs = "0.11.0"
 rand = "0.8.5"
+log = { version = "*", features = ["max_level_debug", "release_max_level_warn"] }
 
 # Enable a small amount of optimization in the dev profile.
 [profile.dev]
@@ -20,11 +21,9 @@ opt-level = 3
 
 # Enable more optimization in the release profile at the cost of compile time.
 [profile.release]
-# Compile the entire crate as one unit.
-# Slows compile times, marginal improvements.
+# Compile the entire crate as one unit. Slows compile times, marginal improvements.
 codegen-units = 1
-# Do a second optimization pass over the entire program, including dependencies.
-# Slows compile times, marginal improvements.
+# Do a second optimization pass over the entire program, including dependencies. Slows compile times, marginal improvements.
 lto = "thin"
 
 # Want even MORE compile-time optimizations? Look at this:

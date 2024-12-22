@@ -61,13 +61,6 @@ fn main() {
       )
     ).insert_resource(
       ClearColor(Color::NONE) // for transparent window
-    ).add_systems(
-      Update,
-      (
-        gamepad_events,
-        gamepad_ordered_events,
-        print_keyboard_event_system,
-      ),
     ).add_systems(Startup, setup)
     .add_systems(Update, update)
     .run();
@@ -77,16 +70,13 @@ fn setup(
   mut commands: Commands,
   mut meshes: ResMut<Assets<Mesh>>,
   mut materials: ResMut<Assets<StandardMaterial>>,
-  mut ambient_light: ResMut<AmbientLight>,
 ) {
-  let mut rng = rand::thread_rng();
-  ambient_light.color = Color::WHITE;
 
   let LENGTH = 256.0;
   let WIDTH  = 1./32.0;
-  let N      = 16;
+  let N      = 10;
 
-  for z in -(2*N)..1 {
+  for z in -(2*(N-1))..1 {
     for x in -N..N {
       commands.spawn((
         Mesh3d(meshes.add(Cuboid::new(LENGTH, WIDTH, WIDTH))),
@@ -129,7 +119,7 @@ fn setup(
           ..Default::default()
       },
       Projection::from(PerspectiveProjection {
-        fov: 80.0_f32.to_radians(),
+        fov: 70.0_f32.to_radians(),
         ..default()
       }),
       Transform::from_xyz(0.3, 0.3, 0.)
@@ -140,7 +130,7 @@ fn setup(
       DistanceFog {
         color: Color::srgb_u8(30, 29, 57), 
         falloff: FogFalloff::Linear {
-            start: 2.0,
+            start: 4.0,
             end: 12.0,
         },
         ..default()
@@ -162,7 +152,6 @@ fn update(
   } else {
     (0.0, 0.0)
   };
-
 
   for (cam, mut transform) in &mut query {
     transform.translation.x = (transform.translation.x).rem_euclid(1.0);
